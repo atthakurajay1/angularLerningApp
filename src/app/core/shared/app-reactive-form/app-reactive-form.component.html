@@ -1,0 +1,257 @@
+<mat-card class="matcard-container">
+    <form name="coreForm" [formGroup]="coreForm" (ngSubmit)="formConfigutaion.submit(coreForm.value)">
+        <mat-card-header class="matherader">
+            <mat-card-title>{{ formConfigutaion.title }}</mat-card-title>
+            <mat-card-subtitle>{{ formConfigutaion.subtitle }}</mat-card-subtitle>
+        </mat-card-header>
+        <!-- <app-content-loading *ngIf="showLoading" type="profile" time="20"></app-content-loading> -->
+        <mat-card-content>
+            <div fxLayout="column" fxFlexAlign="start" class="content-box">
+
+                <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="20px">
+                    <ng-container *ngFor="let rowItem of configList;">
+                        <ng-container *ngIf="rowItem.inputType === 'text' || rowItem.inputType === 'number'">
+                            <mat-form-field appearance="{{ formConfigutaion.appearance }}" fxFlex="{{ rowItem.flex }}"
+                                fxFlexFill>
+                                <mat-label>{{ rowItem.label }}</mat-label>
+                                <input matInput placeholder="{{rowItem.placeholder}}"
+                                    formControlName="{{rowItem.name }}" type="{{ rowItem.inputType }}"
+                                    [disabled]="rowItem.disabled">
+                                <mat-error
+                                    *ngIf="coreForm.get(rowItem.name).invalid && (coreForm.get(rowItem.name).dirty || coreForm.get(rowItem.name).touched)">
+                                    {{ getErrorMessage(rowItem) }}
+                                </mat-error>
+                            </mat-form-field>
+                        </ng-container>
+
+                        <ng-container *ngIf="rowItem.inputType === 'date'">
+                            <mat-form-field appearance="{{ formConfigutaion.appearance }}" fxFlex="{{rowItem.flex}}">
+                                <mat-label>{{ rowItem.label }}</mat-label>
+                                <input matInput [matDatepicker]="myDatepicker" formControlName="{{rowItem.name }}"
+                                    [disabled]="rowItem.disabled">
+                                <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+                                <mat-datepicker #myDatepicker startView="{{rowItem.dateVarient }}"></mat-datepicker>
+                            </mat-form-field>
+                        </ng-container>
+
+                        <ng-container *ngIf="rowItem.inputType === 'select'">
+                            <mat-form-field appearance="{{formConfigutaion.appearance}}" fxFlex="{{rowItem.flex}}">
+                                <mat-label>{{ rowItem.label }}</mat-label>
+                                <mat-select placeholder="{{ rowItem.placeholder }}" formControlName="{{ rowItem.name }}"
+                                    [disabled]="rowItem.disabled">
+                                    <mat-option [value]="item.value" *ngFor="let item of rowItem.optionList">
+                                        {{ item.key }}</mat-option>
+                                </mat-select>
+                                <mat-error
+                                    *ngIf="coreForm.get(rowItem.name).invalid && (coreForm.get(rowItem.name).dirty || coreForm.get(rowItem.name).touched)">
+                                    {{ getErrorMessage(rowItem) }}
+                                </mat-error>
+                            </mat-form-field>
+                        </ng-container>
+
+                        <ng-container *ngIf="rowItem.inputType === 'multiselect'">
+                            <mat-form-field appearance="{{formConfigutaion.appearance}}" fxFlex="{{rowItem.flex}}">
+                                <mat-label>{{ rowItem.label }}</mat-label>
+                                <mat-select placeholder="{{ rowItem.placeholder }}" multiple
+                                    formControlName="{{ rowItem.name }}" [disabled]="rowItem.disabled">
+                                    <mat-option [value]="item.value" *ngFor="let item of rowItem.optionList">
+                                        {{ item.key }}</mat-option>
+                                </mat-select>
+                                <mat-error
+                                    *ngIf="coreForm.get(rowItem.name).invalid && (coreForm.get(rowItem.name).dirty || coreForm.get(rowItem.name).touched)">
+                                    {{ getErrorMessage(rowItem) }}
+                                </mat-error>
+                            </mat-form-field>
+                        </ng-container>
+                        <!-- Form Group Handing -->
+                        <ng-container *ngIf="rowItem.isNestedGroup">
+                            <mat-card class="matcard-container-nested">
+                                <form formGroupName="{{ rowItem.name }}">
+                                    <mat-card-header>
+                                        <mat-card-title>{{ rowItem.title }}</mat-card-title>
+                                    </mat-card-header>
+                                    <mat-card-content>
+                                        <div fxLayout="column" fxFlexAlign="start" class="content-box-nested">
+                                            <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="20px">
+                                                <ng-container *ngFor="let rowNestedItem of rowItem.groupElement;">
+                                                    <ng-container
+                                                        *ngIf="rowNestedItem.inputType === 'text' || rowNestedItem.inputType === 'number'">
+                                                        <mat-form-field appearance="{{ formConfigutaion.appearance }}"
+                                                            fxFlex="{{ rowNestedItem.flex }}" fxFlexFill>
+                                                            <mat-label>{{ rowNestedItem.label }}</mat-label>
+                                                            <input matInput placeholder="{{rowNestedItem.placeholder}}"
+                                                                formControlName="{{rowNestedItem.name }}"
+                                                                type="{{ rowNestedItem.inputType }}"
+                                                                [disabled]="rowNestedItem.disabled">
+                                                            <mat-error
+                                                                *ngIf="coreForm.get(rowItem.name).get(rowNestedItem.name).invalid && (coreForm.get(rowItem.name).get(rowNestedItem.name).dirty || coreForm.get(rowItem.name).get(rowNestedItem.name).touched)">
+                                                                {{ getErrorMessage(rowNestedItem, rowItem.name) }}
+                                                            </mat-error>
+                                                        </mat-form-field>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="rowNestedItem.inputType === 'date'">
+                                                        <mat-form-field appearance="{{ formConfigutaion.appearance }}"
+                                                            fxFlex="{{rowNestedItem.flex}}">
+                                                            <mat-label>{{ rowNestedItem.label }}</mat-label>
+                                                            <input matInput [matDatepicker]="myDatepicker"
+                                                                formControlName="{{rowNestedItem.name }}"
+                                                                [disabled]="rowNestedItem.disabled">
+                                                            <mat-datepicker-toggle matSuffix [for]="myDatepicker">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #myDatepicker
+                                                                startView="{{rowNestedItem.dateVarient }}">
+                                                            </mat-datepicker>
+                                                        </mat-form-field>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="rowNestedItem.inputType === 'select'">
+                                                        <mat-form-field appearance="{{formConfigutaion.appearance}}"
+                                                            fxFlex="{{rowNestedItem.flex}}">
+                                                            <mat-label>{{ rowNestedItem.label }}</mat-label>
+                                                            <mat-select placeholder="{{ rowNestedItem.placeholder }}"
+                                                                formControlName="{{ rowNestedItem.name }}"
+                                                                [disabled]="rowNestedItem.disabled">
+                                                                <mat-option [value]="item.value"
+                                                                    *ngFor="let item of rowNestedItem.optionList">
+                                                                    {{ item.key }}</mat-option>
+                                                            </mat-select>
+                                                            <mat-error
+                                                                *ngIf="coreForm.get(rowItem.name).get(rowNestedItem.name).invalid && (coreForm.get(rowItem.name).get(rowNestedItem.name).dirty || coreForm.get(rowItem.name).get(rowNestedItem.name).touched)">
+                                                                {{ getErrorMessage(rowNestedItem, rowItem.name) }}
+                                                            </mat-error>
+                                                        </mat-form-field>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="rowNestedItem.inputType === 'multiselect'">
+                                                        <mat-form-field appearance="{{formConfigutaion.appearance}}"
+                                                            fxFlex="{{rowNestedItem.flex}}">
+                                                            <mat-label>{{ rowNestedItem.label }}</mat-label>
+                                                            <mat-select placeholder="{{ rowNestedItem.placeholder }}"
+                                                                multiple formControlName="{{ rowNestedItem.name }}"
+                                                                [disabled]="rowNestedItem.disabled">
+                                                                <mat-option [value]="item.value"
+                                                                    *ngFor="let item of rowNestedItem.optionList">
+                                                                    {{ item.key }}</mat-option>
+                                                            </mat-select>
+                                                            <mat-error
+                                                                *ngIf="coreForm.get(rowItem.name).get(rowNestedItem.name).invalid && (coreForm.get(rowItem.name).get(rowNestedItem.name).dirty || coreForm.get(rowItem.name).get(rowNestedItem.name).touched)">
+                                                                {{ getErrorMessage(rowNestedItem, rowItem.name) }}
+                                                            </mat-error>
+                                                        </mat-form-field>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </mat-card-content>
+                                </form>
+                            </mat-card>
+                        </ng-container>
+
+                        <!-- Form Array Handing -->
+                        <ng-container *ngIf="rowItem.isFormArrayEnabled" formArrayName="{{rowItem.name}}">
+                            <div fxLayout="row" fxFlex="100" class="addFormArryHeader">
+                                <button mat-button (click)="addFormGroup(rowItem.groupArrayElement, rowItem.name)">Add :
+                                    {{ rowItem.title }}
+                                </button>
+                            </div>
+                            <mat-card class="matcard-container-nested" [formGroupName]="i"
+                                *ngFor="let coreArrayForm of rowItem.name.controls; let i=index;">
+                                <form>
+                                    <mat-card-header>
+                                        <mat-card-title>{{ i }} : {{ rowItem.title }}</mat-card-title>
+                                        <button mat-button (click)="removeFormGroup(i, rowItem.name)">Remove</button>
+                                    </mat-card-header>
+                                    <mat-card-content>
+                                        <div fxLayout="column" fxFlexAlign="start" class="content-box-nested">
+                                            <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="20px">
+                                                <ng-container *ngFor="let rowNestedItem of rowItem.groupArrayElement;">
+                                                    <ng-container
+                                                        *ngIf="rowNestedItem.inputType === 'text' || rowNestedItem.inputType === 'number'">
+                                                        <mat-form-field appearance="{{ formConfigutaion.appearance }}"
+                                                            fxFlex="{{ rowNestedItem.flex }}" fxFlexFill>
+                                                            <mat-label>{{ rowNestedItem.label }}</mat-label>
+                                                            <input matInput placeholder="{{rowNestedItem.placeholder}}"
+                                                                formControlName="{{rowNestedItem.name }}"
+                                                                type="{{ rowNestedItem.inputType }}"
+                                                                [disabled]="rowNestedItem.disabled">
+                                                            <!-- <mat-error
+                                                                    *ngIf="coreArrayForm.get(rowNestedItem.name).invalid && (coreArrayForm.get(rowNestedItem.name).dirty || coreArrayForm.get(rowNestedItem.name).touched)">
+                                                                    {{ getErrorMessage(rowNestedItem, rowItem.name) }}
+                                                                </mat-error> -->
+                                                        </mat-form-field>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="rowNestedItem.inputType === 'date'">
+                                                        <mat-form-field appearance="{{ formConfigutaion.appearance }}"
+                                                            fxFlex="{{rowNestedItem.flex}}">
+                                                            <mat-label>{{ rowNestedItem.label }}</mat-label>
+                                                            <input matInput [matDatepicker]="myDatepicker"
+                                                                formControlName="{{rowNestedItem.name }}"
+                                                                [disabled]="rowNestedItem.disabled">
+                                                            <mat-datepicker-toggle matSuffix [for]="myDatepicker">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #myDatepicker
+                                                                startView="{{rowNestedItem.dateVarient }}">
+                                                            </mat-datepicker>
+                                                        </mat-form-field>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="rowNestedItem.inputType === 'select'">
+                                                        <mat-form-field appearance="{{formConfigutaion.appearance}}"
+                                                            fxFlex="{{rowNestedItem.flex}}">
+                                                            <mat-label>{{ rowNestedItem.label }}</mat-label>
+                                                            <mat-select placeholder="{{ rowNestedItem.placeholder }}"
+                                                                formControlName="{{ rowNestedItem.name }}"
+                                                                [disabled]="rowNestedItem.disabled">
+                                                                <mat-option [value]="item.value"
+                                                                    *ngFor="let item of rowNestedItem.optionList">
+                                                                    {{ item.key }}</mat-option>
+                                                            </mat-select>
+                                                            <!-- <mat-error
+                                                                    *ngIf="coreForm.get(rowItem.name).get(rowNestedItem.name).invalid && (coreForm.get(rowItem.name).get(rowNestedItem.name).dirty || coreForm.get(rowItem.name).get(rowNestedItem.name).touched)">
+                                                                    {{ getErrorMessage(rowNestedItem, rowItem.name) }}
+                                                                </mat-error> -->
+                                                        </mat-form-field>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="rowNestedItem.inputType === 'multiselect'">
+                                                        <mat-form-field appearance="{{formConfigutaion.appearance}}"
+                                                            fxFlex="{{rowNestedItem.flex}}">
+                                                            <mat-label>{{ rowNestedItem.label }}</mat-label>
+                                                            <mat-select placeholder="{{ rowNestedItem.placeholder }}"
+                                                                multiple formControlName="{{ rowNestedItem.name }}"
+                                                                [disabled]="rowNestedItem.disabled">
+                                                                <mat-option [value]="item.value"
+                                                                    *ngFor="let item of rowNestedItem.optionList">
+                                                                    {{ item.key }}</mat-option>
+                                                            </mat-select>
+                                                            <!-- <mat-error
+                                                                    *ngIf="coreForm.get(rowItem.name).get(rowNestedItem.name).invalid && (coreForm.get(rowItem.name).get(rowNestedItem.name).dirty || coreForm.get(rowItem.name).get(rowNestedItem.name).touched)">
+                                                                    {{ getErrorMessage(rowNestedItem, rowItem.name) }}
+                                                                </mat-error> -->
+                                                        </mat-form-field>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </mat-card-content>
+                                </form>
+                            </mat-card>
+                        </ng-container>
+
+                    </ng-container>
+                </div>
+            </div>
+            <div fxLayout="column" fxFlexAlign="start" class="content-box">
+
+            </div>
+        </mat-card-content>
+
+        <mat-card-footer fxLayoutAlign="end end" class="cardfooter">
+            <button type="submit" mat-button *ngIf="formConfigutaion"
+                [disabled]="coreForm.invalid">{{ formConfigutaion.submitButtonName }}</button>
+            <button type="reset" mat-button *ngIf="formConfigutaion.enabledResetButton">Reset</button>
+        </mat-card-footer>
+    </form>
+</mat-card>

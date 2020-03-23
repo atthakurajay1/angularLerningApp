@@ -1,0 +1,11 @@
+<mat-toolbar color="primary">
+    <i class="fa fa-bars fa-1x" [matMenuTriggerFor]="menu"></i>
+
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngFor="let item of menuList" (click)="onMenuItemClick(item)">
+            {{ item.menuName }}
+        </button>
+    </mat-menu>
+    <span class="moduleTitle">Application</span>
+
+</mat-toolbar>

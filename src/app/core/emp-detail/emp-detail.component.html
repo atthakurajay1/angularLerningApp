@@ -1,0 +1,82 @@
+<div class="loadingcontainer">
+    <div class="loading"></div>
+    <div class="loading"></div>
+    <div class="loading"></div>
+    <div class="loading"></div>
+</div>
+
+<div class="container row">
+    <form name="empform" [formGroup]="empForm" (ngSubmit)="sumbitForm()">
+        <div class="jumbotron" [@queryAnimation]="exp">
+            <h1><small>Employee Registration Form</small></h1>
+            <div class="content">
+                Example Animation
+            </div>
+        </div>
+
+        <mat-slide-toggle>Slide me!</mat-slide-toggle>
+        <button [@addButtonAnimate]="animationName" (click)="changeAnimation()" class="clickme">Click Me</button>
+
+        <div class="form-group col-md-10">
+            <label for="empname">Emp Name : </label>
+            <input id="empname" class="form-control" placeholder="Enter Emp Name" formControlName="empName">
+            <div *ngIf="empForm.get('empName').invalid && (empForm.get('empName').dirty || empForm.get('empName').touched)"
+                class="alert alert-danger">
+                <div *ngIf="empForm.get('empName').errors.required">
+                    Name is required.
+                </div>
+                <div *ngIf="empForm.get('empName').errors.minlength">
+                    Name is to short required {{ empForm.get("empName").errors.minlength.requiredLength }}
+                </div>
+                <div *ngIf="empForm.get('empName').errors.nameExistValidation">
+                    {{ empForm.get("empName").errors.nameExistValidation.msg }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-md-10">
+            <label for="fname">Emp Father Name : </label>
+            <input id="fname" class="form-control" placeholder="Enter Father Name" formControlName="empFName">
+        </div>
+
+        <div class="container">
+            <h1><small>Addess</small></h1>
+            <button (click)="addAddress()" class="btn btn-success">Add</button>
+        </div>
+
+        <div formArrayName="address" class="col-md-10">
+            <div [formGroupName]="i" *ngFor="let add of address.controls; let i=index;">
+                <div class="form-group">
+                    <label for="area">Area</label>
+                    <input id="aread" class="form-control" placeholder="Area" formControlName="area" required>
+                    <div *ngIf="add.get('area').invalid && (add.get('area').dirty || add.get('area').touched)"
+                        class="alert alert-danger">
+                        <div *ngIf="add.get('area').errors.required">
+                            Area is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="area">District</label>
+                    <input id="distict" class="form-control" placeholder="distict" formControlName="distict">
+                    <div *ngIf="add.get('distict').invalid && (add.get('distict').touched || add.get('distict').dirty)"
+                        class="alert alert-danger">
+                        <div *ngIf="add.get('distict').errors.validateCity">
+                            Not a valid City {{ add.get('distict').errors.validateCity.requireCity }}
+                        </div>
+
+                        <div *ngIf="add.get('distict').errors.required">
+                            Distric is Required.
+                        </div>
+                    </div>
+                </div>
+
+                <button (click)="removeAdd(i)" class="btn btn-default">Remove</button>
+            </div>
+        </div>
+
+        <input type="submit" class="btn btn-primary" value="Submit">
+        <input type="reset" class="btn btn-warning" value="Reset">
+    </form>
+</div>

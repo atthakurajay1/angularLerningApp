@@ -1,0 +1,42 @@
+<p>view app name : {{ viewpn }}</p>
+
+<button mat-button (click)="isUserExist = !isUserExist">Toggle</button>
+
+<!-- <ng-template [ngIf]="isUserExist" [ngIfElse]="elseBloack" [ngIfThen]="thenBlock">
+</ng-template> -->
+
+<!-- <div *ngIf="isUserExist; else elseBloack" class="colorgreen">
+    <p> User Is exits ng then block : {{ userName }}</p>
+</div> -->
+
+<!-- <ng-template #thenBlock>
+        <p> User Is exits ng then block : {{ userName }}</p>
+</ng-template> -->
+
+<!-- <ng-container *ngFor="let item of itemList">
+  
+    <ng-template [ngIf]="item === 'ajay'">
+        <p>Ajay list Item</p>
+    </ng-template>
+
+</ng-container> -->
+
+<ng-content select="h1"></ng-content>
+<ng-content></ng-content>
+
+Template Data: <input name="template" [(ngModel)]="temp">
+<button (click)="changeTemplate(temp)">Change Template</button>
+
+<ng-template #a let-data="a">
+    <p>template {{ data }}</p>
+</ng-template>
+
+<ng-template #b let-bdata="b">
+    <p>template {{ bdata }}</p>
+</ng-template>
+
+<ng-template #c let-data>
+    <p>tempalte {{ data }}</p>
+</ng-template>
+
+<ng-container [ngTemplateOutlet]="mytemp" [ngTemplateOutletContext]="tempdata"></ng-container>
