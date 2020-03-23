@@ -42,3 +42,29 @@
     border: 1px solid gray;
  
 }
+
+.nestedArryHeader {
+    background: #8474c44a;
+    border: 1px dodgerblue;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.content-box-nested-formArray {
+    padding: 5px;
+    margin: 5px;
+}
+
+.arryFormTitle {
+    font-size: 15px;
+    font-weight: bold;
+    color: blue;
+    position: relative;
+    top: 4px;
+}
+
+.removeButton {
+    font-size: 15px;
+    font-weight: bold;
+    color: blue;
+}

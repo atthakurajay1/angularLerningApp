@@ -155,11 +155,11 @@ export class UserCreationComponent implements OnInit {
     },
     {
       "name": "address",
-      "isFormArrayEnabled": false,
-      "isNestedGroup": true,
+      "isFormArrayEnabled": true,
+      "isNestedGroup": false,
       "title": "Addess",
       "subtitle": "",
-      "groupElement": [{
+      "groupArrayElement": [{
         "inputType": "text",
         "flex": "20",
         "value": "",
