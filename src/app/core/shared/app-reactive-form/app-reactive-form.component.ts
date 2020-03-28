@@ -73,36 +73,45 @@ export class AppReactiveFormComponent implements OnInit {
     return list;
   }
 
-  elementInstance(name: string, formName: any): FormControl {
-    if (formName) {
+  elementInstance(name: string, formName: any, arrayIndex: number): FormControl {
+    if (formName && arrayIndex === 0) {
+      //formArray
+      let formarray = <FormArray>this.coreForm.get(formName);
+      return <FormControl>formarray.controls[arrayIndex].get(name);
+    } else if (formName && arrayIndex) {
+      let formarray = <FormArray>this.coreForm.get(formName);
+      return <FormControl>formarray.controls[arrayIndex].get(name);
+    } else if (formName) {
+      //form Group
       return <FormControl>this.coreForm.get(formName).get(name);
     } else {
+      //normal form group
       return <FormControl>this.coreForm.get(name);
     }
   }
 
-  getErrorMessage(elementItem, formName?: string): string {
+  getErrorMessage(elementItem, formName?: string, arrayIndex?: number): string {
     let msg = "message not found";
-    if (this.elementInstance(elementItem.name, formName).hasError("required")) {
+    if (this.elementInstance(elementItem.name, formName, arrayIndex).hasError("required")) {
       let validateObj = elementItem.validations.find(x => x.name === "required");
       return validateObj.errorMsg || `${elementItem.name} is required.`
     }
-    if (this.elementInstance(elementItem.name, formName).hasError("min")) {
+    if (this.elementInstance(elementItem.name, formName, arrayIndex).hasError("min")) {
       let validateObj = elementItem.validations.find(x => x.name === "min");
       return validateObj.errorMsg || `minimum number is ${validateObj.value}`;
     }
 
-    if (this.elementInstance(elementItem.name, formName).hasError("max")) {
+    if (this.elementInstance(elementItem.name, formName, arrayIndex).hasError("max")) {
       let validateObj = elementItem.validations.find(x => x.name === "max");
       return validateObj.errorMsg || `maximum number is ${validateObj.value}`
     }
 
-    if (this.elementInstance(elementItem.name, formName).hasError("minlength")) {
+    if (this.elementInstance(elementItem.name, formName, arrayIndex).hasError("minlength")) {
       let validateObj = elementItem.validations.find(x => x.name === "minLength");
       return validateObj.errorMsg || `minimum length is ${validateObj.value}`
     }
 
-    if (this.elementInstance(elementItem.name, formName).hasError("maxlength")) {
+    if (this.elementInstance(elementItem.name, formName, arrayIndex).hasError("maxlength")) {
       let validateObj = elementItem.validations.find(x => x.name === "maxLength");
       return validateObj.errorMsg || `minimum length is ${validateObj.value}`
     }

@@ -154,6 +154,17 @@ export class UserCreationComponent implements OnInit {
       "validations": [{ "name": "required", "value": true, "errorMsg": "It is Required" }, { "name": "minDate", "value": new Date, "errorMsg": "It is Required" }, { "name": "maxDate", "value": new Date, "errorMsg": "It is Required" }]
     },
     {
+      "inputType": "textarea",
+      "flex": "100",
+      "value": "",
+      "placeholder": "Write Comments",
+      "label": "Comments",
+      "disabled": true,
+      "show": true,
+      "name": "comments",
+      "validations": [{ "name": "required", "value": true, "errorMsg": "This is Required" }, { "name": "min", "value": 10, "errorMsg": "Minumum 50" }, { "name": "max", "value": 20, "errorMsg": "" }, { "name": "minLength", "value": "50", "errorMsg": "Minumum user input 50" }, { "name": "maxLength", "value": "200", "errorMsg": "" }]
+    },
+    {
       "name": "address",
       "isFormArrayEnabled": true,
       "isNestedGroup": false,
